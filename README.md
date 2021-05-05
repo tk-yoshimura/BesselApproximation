@@ -18,7 +18,7 @@ Modified Bessel functions  of the second kind:
 
 ![define besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/define_besselK.svg)
 
-## Iinearly Independent
+## Linearly Independent
 
 ![depend besselJ](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/depend_besselJ.svg)
 
@@ -44,6 +44,8 @@ Modified Bessel functions  of the second kind:
 
 ![limit besselJY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselJY.svg)
 
+![limit besselIK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselIK.svg)
+
 ## Generate Coefs
 
-![coef bessel.svg](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/coef_bessel.svg)
+![coef bessel](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/coef_bessel.svg)
