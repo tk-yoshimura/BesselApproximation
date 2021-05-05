@@ -21,33 +21,38 @@ namespace BesselApproximation {
             //BesselLimitValuesSummary<Pow2.N128>("../../../../results/bessel_limit_values_n128.txt", 1436, 1428);
             //BesselLimitValuesSummary<Pow2.N256>("../../../../results/bessel_limit_values_n256.txt", 2856, 2826);
 
-            BesselNearZeroConvergenceSummary<Pow2.N4, Expand25<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m5.txt", 60, 56);
-            BesselNearZeroConvergenceSummary<Pow2.N4, Expand50<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m6.txt", 60, 56);
-            BesselNearZeroConvergenceSummary<Pow2.N4, Double<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m8.txt", 60, 56);
+            //BesselNearZeroConvergenceSummary<Pow2.N4, Expand25<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m5.txt", 60, 56);
+            //BesselNearZeroConvergenceSummary<Pow2.N4, Expand50<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m6.txt", 60, 56);
+            //BesselNearZeroConvergenceSummary<Pow2.N4, Double<Pow2.N4>>("../../../../results/bessel_nearzero_convergence_n4_m8_zoom.txt", 60, 56);
 
-            BesselNearZeroConvergenceSummary<Pow2.N8, Expand25<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m10.txt", 104, 100);
-            BesselNearZeroConvergenceSummary<Pow2.N8, Expand50<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m12.txt", 104, 100);
-            BesselNearZeroConvergenceSummary<Pow2.N8, Double<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m16.txt", 104, 100);
+            //BesselNearZeroConvergenceSummary<Pow2.N8, Expand25<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m10.txt", 104, 100);
+            //BesselNearZeroConvergenceSummary<Pow2.N8, Expand50<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m12.txt", 104, 100);
+            //BesselNearZeroConvergenceSummary<Pow2.N8, Double<Pow2.N8>>("../../../../results/bessel_nearzero_convergence_n8_m16_zoom.txt", 104, 100);
 
-            BesselNearZeroConvergenceSummary<Pow2.N16, Expand25<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m20.txt", 192, 172);
-            BesselNearZeroConvergenceSummary<Pow2.N16, Expand50<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m24.txt", 192, 172);
-            BesselNearZeroConvergenceSummary<Pow2.N16, Double<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m32.txt", 192, 172);
+            //BesselNearZeroConvergenceSummary<Pow2.N16, Expand25<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m20.txt", 192, 172);
+            //BesselNearZeroConvergenceSummary<Pow2.N16, Expand50<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m24.txt", 192, 172);
+            //BesselNearZeroConvergenceSummary<Pow2.N16, Double<Pow2.N16>>("../../../../results/bessel_nearzero_convergence_n16_m32_zoom.txt", 192, 172);
 
-            BesselNearZeroConvergenceSummary<Pow2.N32, Expand25<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m40.txt", 372, 368);
-            BesselNearZeroConvergenceSummary<Pow2.N32, Expand50<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m48.txt", 372, 368);
-            BesselNearZeroConvergenceSummary<Pow2.N32, Double<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m64.txt", 372, 368);
+            //BesselNearZeroConvergenceSummary<Pow2.N32, Expand25<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m40.txt", 372, 368);
+            //BesselNearZeroConvergenceSummary<Pow2.N32, Expand50<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m48.txt", 372, 368);
+            //BesselNearZeroConvergenceSummary<Pow2.N32, Double<Pow2.N32>>("../../../../results/bessel_nearzero_convergence_n32_m64_zoom.txt", 372, 368);
 
-            BesselNearZeroConvergenceSummary<Pow2.N64, Expand25<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m80.txt", 724, 700);
-            BesselNearZeroConvergenceSummary<Pow2.N64, Expand50<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m96.txt", 724, 700);
-            BesselNearZeroConvergenceSummary<Pow2.N64, Double<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m128.txt", 724, 700);
+            //BesselNearZeroConvergenceSummary<Pow2.N64, Expand25<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m80.txt", 724, 700);
+            //BesselNearZeroConvergenceSummary<Pow2.N64, Expand50<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m96.txt", 724, 700);
+            //BesselNearZeroConvergenceSummary<Pow2.N64, Double<Pow2.N64>>("../../../../results/bessel_nearzero_convergence_n64_m128_zoom.txt", 724, 700);
 
-            BesselNearZeroConvergenceSummary<Pow2.N128, Expand25<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m160.txt", 1436, 1428);
-            BesselNearZeroConvergenceSummary<Pow2.N128, Expand50<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m196.txt", 1436, 1428);
-            BesselNearZeroConvergenceSummary<Pow2.N128, Double<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m256.txt", 1436, 1428);
+            //BesselNearZeroConvergenceSummary<Pow2.N128, Expand25<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m160.txt", 1436, 1428);
+            //BesselNearZeroConvergenceSummary<Pow2.N128, Expand50<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m196.txt", 1436, 1428);
+            //BesselNearZeroConvergenceSummary<Pow2.N128, Double<Pow2.N128>>("../../../../results/bessel_nearzero_convergence_n128_m256_zoom.txt", 1436, 1428);
 
             //BesselNearZeroConvergenceSummary<Pow2.N256, Expand25<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m320.txt", 2856, 2826);
             //BesselNearZeroConvergenceSummary<Pow2.N256, Expand50<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m384.txt", 2856, 2826);
             //BesselNearZeroConvergenceSummary<Pow2.N256, Double<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m512.txt", 2856, 2826);
+
+
+            MultiPrecision<Pow2.N4> t = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-15.5, 10);
+
+            Console.WriteLine(t);
 
             Console.WriteLine("END");
             Console.Read();
@@ -105,7 +110,7 @@ namespace BesselApproximation {
         private static void BesselLimitValuesSummary<N>(string filepath, int z_init, int terms) where N : struct, IConstant {
             using (StreamWriter sw = new StreamWriter(filepath)) {
                 sw.WriteLine($"bits: {MultiPrecision<N>.Bits}");
-                
+
                 for (decimal nu = 0; nu <= 2; nu += 1 / 32m) {
                     sw.WriteLine($"nu: {nu}");
 
@@ -126,10 +131,10 @@ namespace BesselApproximation {
 
                 int min_matchbits = MultiPrecision<N>.Bits;
 
-                for (decimal nu = 0; nu <= 2; nu += 1 / 8m) {
+                for (decimal nu = 0; nu <= 2; nu += 1 / 16m) {
                     sw.WriteLine($"nu: {nu}");
 
-                    for (decimal z = z_init - 4; z <= z_init + 4; z += 0.25m) {
+                    for (decimal z = z_init - 4; z <= z_init + 4; z += 1 / 32m) {
                         MultiPrecision<N> t = BesselLimitApprox<N>.Value(nu, z, terms);
                         MultiPrecision<N> s = BesselNearZeroApprox<N, M>.Value(nu, z);
 
@@ -142,14 +147,14 @@ namespace BesselApproximation {
                         MultiPrecision<N> err = MultiPrecision<N>.Abs(t - s);
 
                         sw.WriteLine($"  err : {err}");
-                        
+
                         for (int keepbits = MultiPrecision<N>.Bits; keepbits >= 0; keepbits--) {
                             if (keepbits == 0) {
                                 min_matchbits = 0;
                             }
                             else if (MultiPrecision<N>.RoundMantissa(t, MultiPrecision<N>.Bits - keepbits) == MultiPrecision<N>.RoundMantissa(s, MultiPrecision<N>.Bits - keepbits)) {
                                 sw.WriteLine($"  matchbits : {keepbits}");
-                                
+
                                 if (keepbits < min_matchbits) {
                                     min_matchbits = keepbits;
                                 }
