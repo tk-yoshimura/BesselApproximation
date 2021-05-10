@@ -29,71 +29,44 @@ namespace BesselApproximation {
             }
             if (nu.Sign == Sign.Minus && nu == MultiPrecision<N>.Floor(nu)) {
                 long n = (long)nu;
-                return ((n & 1L) == 0) ? BesselJ(nu, x) : -BesselJ(nu, x);
+                return ((n & 1L) == 0) ? BesselJ(MultiPrecision<N>.Abs(nu), x) : -BesselJ(MultiPrecision<N>.Abs(nu), x);
             }
 
-            return BesselJCore(nu, x).Convert<N>();
-        }
+            if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Floor(nu)) {
+                long n = (long)MultiPrecision<N>.Floor(nu);
 
-        private static MultiPrecision<Plus4<N>> BesselJCore(MultiPrecision<N> nu, MultiPrecision<N> z) {
-            if (nu < -32 || nu > 32) {
-                MultiPrecision<Plus4<N>> z_ex = z.Convert<Plus4<N>>();
+                if (n >= -2 || n < 2) {
+                    MultiPrecision<Plus1<N>> x_ex = x.Convert<Plus1<N>>();
+                    MultiPrecision<Plus1<N>> envelope = MultiPrecision<Plus1<N>>.Sqrt(2 / (MultiPrecision<Plus1<N>>.PI * x_ex));
 
-                if (nu < 0) {
-                    long recurrs = (long)-MultiPrecision<N>.Floor(nu);
-                    MultiPrecision<N> nu_0 = nu + recurrs;
-                    MultiPrecision<Plus4<N>> y_m1 = null, y_0 = BesselJCore(nu_0, z), y_1 = BesselJCore(nu_0 + 1, z);
-
-                    for (long i = 0; i < recurrs; i++) {
-                        MultiPrecision<N> nu_m1 = nu_0 - 1;
-                        y_m1 = 2 * nu_0.Convert<Plus4<N>>() * y_0 / z_ex - y_1;
-
-                        nu_0 = nu_m1;
-                        y_1 = y_0; y_0 = y_m1;
+                    if (n == -2) {
+                        return (envelope * -(MultiPrecision<Plus1<N>>.Cos(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Sin(x_ex))).Convert<N>();
                     }
-
-                    return y_m1;
-                }
-                else {
-                    long recurrs = (long)MultiPrecision<N>.Ceiling(nu) - 32;
-                    MultiPrecision<N> nu_0 = nu - recurrs;
-                    MultiPrecision<Plus4<N>> y_p1 = null, y_0 = BesselJCore(nu_0, z), y_1 = BesselJCore(nu_0 - 1, z);
-
-                    for (long i = 0; i < recurrs; i++) {
-                        MultiPrecision<N> nu_p1 = nu_0 + 1;
-                        y_p1 = 2 * nu_0.Convert<Plus4<N>>() * y_0 / z_ex - y_1;
-
-                        nu_0 = nu_p1;
-                        y_1 = y_0; y_0 = y_p1;
+                    if (n == -1) {
+                        return (envelope * MultiPrecision<Plus1<N>>.Cos(x_ex)).Convert<N>();
                     }
-
-                    return y_p1;
+                    if (n == 0) {
+                        return (envelope * MultiPrecision<Plus1<N>>.Sin(x_ex)).Convert<N>();
+                    }
+                    if (n == 1) {
+                        return (envelope * (MultiPrecision<Plus1<N>>.Sin(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cos(x_ex))).Convert<N>();
+                    }
                 }
             }
 
-            if (nu == MultiPrecision<N>.Point5) {
-                MultiPrecision<Plus4<N>> z_ex = z.Convert<Plus4<N>>();
-
-                return MultiPrecision<Plus4<N>>.Sqrt(2 / (MultiPrecision<Plus4<N>>.PI * z_ex))
-                    * MultiPrecision<Plus4<N>>.Sin(z_ex);
+            if (MultiPrecision<N>.Length < 8) { 
+                return MultiPrecisionSandbox<Pow2.N8>.BesselJ(nu.Convert<Pow2.N8>(), x.Convert<Pow2.N8>()).Convert<N>();
             }
 
-            if (nu == 1 + MultiPrecision<N>.Point5) {
-                MultiPrecision<Plus4<N>> z_ex = z.Convert<Plus4<N>>();
-
-                return MultiPrecision<Plus4<N>>.Sqrt(2 / (MultiPrecision<Plus4<N>>.PI * z_ex))
-                    * (MultiPrecision<Plus4<N>>.Sin(z_ex) / z_ex - MultiPrecision<Plus4<N>>.Cos(z_ex));
-            }
-
-            if (z < Consts.BesselJ.ApproxThreshold) {
-                return BesselJNearZero(nu, z);
+            if (x < Consts.BesselJ.ApproxThreshold) {
+                return BesselJNearZero(nu, x).Convert<N>();
             }
             else {
-                return BesselJLimit(nu, z);
+                return BesselJLimit(nu, x).Convert<N>();
             }
         }
 
-        private static MultiPrecision<Plus4<N>> BesselJNearZero(MultiPrecision<N> nu, MultiPrecision<N> z) {
+        private static MultiPrecision<Plus1<N>> BesselJNearZero(MultiPrecision<N> nu, MultiPrecision<N> z) {
             BesselNearZeroCoef<Double<N>> table = Consts.Bessel.NearZeroCoef(nu);
 
             MultiPrecision<Double<N>> z_ex = z.Convert<Double<N>>();
@@ -117,7 +90,7 @@ namespace BesselApproximation {
                 }
                 u *= w;
 
-                if (c.IsZero || x.Exponent - c.Exponent > MultiPrecision<Plus4<N>>.Bits) {
+                if (c.IsZero || x.Exponent - c.Exponent > MultiPrecision<Plus1<N>>.Bits) {
                     break;
                 }
             }
@@ -138,23 +111,21 @@ namespace BesselApproximation {
 
             MultiPrecision<Double<N>> y = x * p;
 
-            return y.Convert<Plus4<N>>();
+            return y.Convert<Plus1<N>>();
         }
 
-        private static MultiPrecision<Plus4<N>> BesselJLimit(MultiPrecision<N> nu, MultiPrecision<N> z) {
+        private static MultiPrecision<Plus1<N>> BesselJLimit(MultiPrecision<N> nu, MultiPrecision<N> z) {
             BesselLimitCoef<Plus4<N>> table = Consts.Bessel.LimitCoef(nu);
 
             MultiPrecision<Plus4<N>> z_ex = z.Convert<Plus4<N>>();
             MultiPrecision<Plus4<N>> v = 1 / z_ex;
             MultiPrecision<Plus4<N>> w = v * v;
-
+                               
             MultiPrecision<Plus4<N>> x = 0, y = 0, p = 1, q = v;
-            MultiPrecision<Plus4<N>> prev_c = null, prev_s = null;
 
             Sign sign = Sign.Plus;
 
-            int k = 0;
-            while (true) {
+            for(int k = 0; k <= Consts.BesselJ.LimitApproxTerms; k++) {
                 MultiPrecision<Plus4<N>> c = p * table.Value(k * 2);
                 MultiPrecision<Plus4<N>> s = q * table.Value(k * 2 + 1);
 
@@ -171,19 +142,11 @@ namespace BesselApproximation {
 
                 p *= w;
                 q *= w;
-                k++;
 
-                if ((prev_c is not null && prev_c.Exponent < c.Exponent) || (prev_s is not null && prev_s.Exponent < s.Exponent)) {
-                    break;
-                }
-
-                prev_c = c;
-                prev_s = s;
-
-                if (!c.IsZero && x.Exponent - c.Exponent <= MultiPrecision<Plus4<N>>.Bits) {
+                if (!c.IsZero && x.Exponent - c.Exponent <= MultiPrecision<Plus1<N>>.Bits) {
                     continue;
                 }
-                if (!s.IsZero && y.Exponent - s.Exponent <= MultiPrecision<Plus4<N>>.Bits) {
+                if (!s.IsZero && y.Exponent - s.Exponent <= MultiPrecision<Plus1<N>>.Bits) {
                     continue;
                 }
 
@@ -194,19 +157,23 @@ namespace BesselApproximation {
             MultiPrecision<Plus4<N>> m = x * MultiPrecision<Plus4<N>>.Cos(omega) - y * MultiPrecision<Plus4<N>>.Sin(omega);
             MultiPrecision<Plus4<N>> t = m * MultiPrecision<Plus4<N>>.Sqrt(2 / (MultiPrecision<Plus4<N>>.PI * z_ex));
 
-            return t;
+            return t.Convert<Plus1<N>>();
         }
 
         private static partial class Consts {
             public static class BesselJ {
                 public static MultiPrecision<N> ApproxThreshold { private set; get; }
 
+                public static int LimitApproxTerms { private set; get; }
+
                 static BesselJ() {
                     if (MultiPrecision<N>.Length > 128) {
                         throw new ArgumentOutOfRangeException(nameof(MultiPrecision<N>.Length));
                     }
 
-                    ApproxThreshold = Math.Floor(50 + 11.0965 * MultiPrecision<N>.Length);
+                    ApproxThreshold = Math.Ceiling(50 + 11.0965 * MultiPrecision<N>.Length);
+
+                    LimitApproxTerms = (int)Math.Ceiling(41 + 11.0190 * MultiPrecision<N>.Length);
 
 #if DEBUG
                     Trace.WriteLine($"BesselJ<{MultiPrecision<N>.Length}> initialized.");
@@ -233,7 +200,7 @@ namespace BesselApproximation {
 
                 public static BesselLimitCoef<Plus4<N>> LimitCoef(MultiPrecision<N> nu) {
                     BesselLimitCoef<Plus4<N>> table;
-                    if (nearzero_table.ContainsKey(nu)) {
+                    if (limit_table.ContainsKey(nu)) {
                         table = limit_table[nu];
                     }
                     else {
@@ -255,11 +222,13 @@ namespace BesselApproximation {
 
                     MultiPrecision<N> a0;
 
-                    if (nu == 0 || nu == 1) {
+                    if (nu >= 0 && nu == MultiPrecision<N>.Floor(nu)) {
+                        long n = (long)nu;
+
                         a0 = 1;
-                    }
-                    else if (nu == 2) {
-                        a0 = 2;
+                        for (int k = 2; k <= n; k++) {
+                            a0 *= k;
+                        }
                     }
                     else {
                         a0 = MultiPrecision<N>.Gamma(nu + 1);

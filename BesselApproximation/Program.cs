@@ -49,10 +49,19 @@ namespace BesselApproximation {
             //BesselNearZeroConvergenceSummary<Pow2.N256, Expand50<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m384.txt", 2856, 2826);
             //BesselNearZeroConvergenceSummary<Pow2.N256, Double<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m512.txt", 2856, 2826);
 
+            MultiPrecision<Pow2.N4> x1 = -64m;
+            MultiPrecision<Plus1<Pow2.N4>> x0 = -64m;
 
-            MultiPrecision<Pow2.N4> t = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-15.5, 10);
+            MultiPrecision<Pow2.N4> s1 = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-64, 0);
+            MultiPrecision<Plus1<Pow2.N4>> s0 = MultiPrecisionSandbox<Plus1<Pow2.N4>>.BesselJ(-64, 0);
+            MultiPrecision<Pow2.N4> t1 = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-64, 4);
+            MultiPrecision<Plus1<Pow2.N4>> t0 = MultiPrecisionSandbox<Plus1<Pow2.N4>>.BesselJ(-64, 4);
 
-            Console.WriteLine(t);
+            BesselConvergenceSummary<Pow2.N4>("../../../../results/bessel_j_n4.txt");
+            BesselConvergenceSummary<Pow2.N8>("../../../../results/bessel_j_n8.txt");
+            BesselConvergenceSummary<Pow2.N16>("../../../../results/bessel_j_n16.txt");
+            BesselConvergenceSummary<Pow2.N32>("../../../../results/bessel_j_n32.txt");
+            BesselConvergenceSummary<Pow2.N64>("../../../../results/bessel_j_n64.txt");
 
             Console.WriteLine("END");
             Console.Read();
@@ -167,6 +176,62 @@ namespace BesselApproximation {
                 }
 
                 sw.WriteLine($"min matchbits : {min_matchbits}");
+            }
+        }
+
+        private static void BesselConvergenceSummary<N>(string filepath) where N : struct, IConstant {
+            using (StreamWriter sw = new StreamWriter(filepath)) {
+                sw.WriteLine($"bits: {MultiPrecision<N>.Bits}");
+
+                int z_threshold = (int)Math.Ceiling(50 + 11.0965 * MultiPrecision<N>.Length);
+
+                sw.WriteLine($"z threshold: {z_threshold}");
+
+                for (decimal nu = -64; nu <= 64; nu += 1 / 8m) {
+                    int min_matchbits = MultiPrecision<N>.Bits;
+                    
+                    sw.WriteLine($"nu: {nu}");
+
+                    for (decimal z = 0; z < Math.Min(8 + 1 / 8m, z_threshold - 8); z += 1 / 8m) {
+                        min_matchbits = plot(sw, nu, min_matchbits, z);
+                    }
+                    for (decimal z = Math.Max(0, z_threshold - 8); z <= z_threshold + 8; z += 1 / 8m) {
+                        min_matchbits = plot(sw, nu, min_matchbits, z);
+                    }
+
+                    sw.WriteLine($"min matchbits : {min_matchbits}");
+                }
+            }
+
+            static int plot(StreamWriter sw, decimal nu, int min_matchbits, decimal z) {
+                MultiPrecision<N> t = MultiPrecisionSandbox<N>.BesselJ(nu, z);
+                MultiPrecision<Plus1<N>> s = MultiPrecisionSandbox<Plus1<N>>.BesselJ(nu, z);
+
+                sw.WriteLine($"  z: {z}");
+                sw.WriteLine($"  f : {t}");
+                sw.WriteLine($"  {t.ToHexcode()}");
+                sw.WriteLine($"  {s.ToHexcode()}");
+
+                MultiPrecision<N> err = MultiPrecision<N>.Abs(t - s.Convert<N>());
+
+                sw.WriteLine($"  err : {err}");
+
+                for (int keepbits = MultiPrecision<N>.Bits; keepbits >= 0; keepbits--) {
+                    if (keepbits == 0) {
+                        min_matchbits = 0;
+                    }
+                    else if (MultiPrecision<N>.RoundMantissa(t, MultiPrecision<N>.Bits - keepbits) == MultiPrecision<N>.RoundMantissa(s.Convert<N>(), MultiPrecision<N>.Bits - keepbits)) {
+                        sw.WriteLine($"  matchbits : {keepbits}");
+
+                        if (keepbits < min_matchbits) {
+                            min_matchbits = keepbits;
+                        }
+
+                        break;
+                    }
+                }
+
+                return min_matchbits;
             }
         }
     }

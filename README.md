@@ -10,6 +10,8 @@ Bessel functions of the second kind:
 
 ![define besselY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/define_besselY.svg)
 
+![int besselY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/int_besselY.svg)
+
 Modified Bessel functions  of the first kind:
 
 ![define besselI](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/define_besselI.svg)
@@ -17,6 +19,8 @@ Modified Bessel functions  of the first kind:
 Modified Bessel functions  of the second kind:
 
 ![define besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/define_besselK.svg)
+
+![int besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/int_besselK.svg)
 
 ## Linearly Independent
 
