@@ -241,6 +241,13 @@ namespace BesselApproximation {
                 MultiPrecision<Double<N>> u = 1;
                 MultiPrecision<Double<N>> w = z_ex * z_ex;
 
+                MultiPrecision<Double<N>> r
+                    = 2 * BesselJNearZero(n, z).Convert<Double<N>>() * MultiPrecision<Double<N>>.Log(z.Convert<Double<N>>() / 2);
+
+                long r_exponent = MultiPrecision<Pow2.N4>.Sqrt(2 / (MultiPrecision<Pow2.N4>.PI * (z.Convert<Pow2.N4>() + MultiPrecision<Pow2.N4>.Point5))).Exponent;
+                
+                MultiPrecision<Double<N>> m = MultiPrecision<Double<N>>.Pow(z_ex / 2, n);
+
                 MultiPrecision<Double<N>> x = 0, y = 0;
 
                 Sign sign = Sign.Plus;
@@ -262,16 +269,10 @@ namespace BesselApproximation {
                         continue;
                     }
 
-                    if (c.IsZero || x.Exponent - c.Exponent > MultiPrecision<Plus8<N>>.Bits) {
+                    if (c.IsZero || Math.Min(x.Exponent - c.Exponent, r_exponent - c.Exponent - m.Exponent) > MultiPrecision<Plus1<N>>.Bits) {
                         break;
                     }
                 }
-
-                MultiPrecision<Double<N>> r
-                    = 2 * MultiPrecisionSandbox<Plus8<N>>.BesselJNearZero(n, z.Convert<Plus8<N>>()).Convert<Double<N>>()
-                        * MultiPrecision<Double<N>>.Log(z.Convert<Double<N>>() / 2);
-
-                MultiPrecision<Double<N>> m = MultiPrecision<Double<N>>.Pow(z_ex / 2, n);
 
                 MultiPrecision<Double<N>> d = (r - y / m - x * m) / MultiPrecision<Double<N>>.PI;
 
