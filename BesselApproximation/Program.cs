@@ -49,19 +49,13 @@ namespace BesselApproximation {
             //BesselNearZeroConvergenceSummary<Pow2.N256, Expand50<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m384.txt", 2856, 2826);
             //BesselNearZeroConvergenceSummary<Pow2.N256, Double<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m512.txt", 2856, 2826);
 
-            MultiPrecision<Pow2.N4> x1 = -64m;
-            MultiPrecision<Plus1<Pow2.N4>> x0 = -64m;
+            //MultiPrecision<Pow2.N4> s1 = MultiPrecisionSandbox<Pow2.N4>.BesselY(1, 0.5);
 
-            MultiPrecision<Pow2.N4> s1 = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-64, 0);
-            MultiPrecision<Plus1<Pow2.N4>> s0 = MultiPrecisionSandbox<Plus1<Pow2.N4>>.BesselJ(-64, 0);
-            MultiPrecision<Pow2.N4> t1 = MultiPrecisionSandbox<Pow2.N4>.BesselJ(-64, 4);
-            MultiPrecision<Plus1<Pow2.N4>> t0 = MultiPrecisionSandbox<Plus1<Pow2.N4>>.BesselJ(-64, 4);
-
-            BesselConvergenceSummary<Pow2.N4>("../../../../results/bessel_j_n4.txt");
-            BesselConvergenceSummary<Pow2.N8>("../../../../results/bessel_j_n8.txt");
-            BesselConvergenceSummary<Pow2.N16>("../../../../results/bessel_j_n16.txt");
-            BesselConvergenceSummary<Pow2.N32>("../../../../results/bessel_j_n32.txt");
-            BesselConvergenceSummary<Pow2.N64>("../../../../results/bessel_j_n64.txt");
+            BesselConvergenceSummary<Pow2.N4>("../../../../results/bessel_y_n4.txt");
+            BesselConvergenceSummary<Pow2.N8>("../../../../results/bessel_y_n8.txt");
+            BesselConvergenceSummary<Pow2.N16>("../../../../results/bessel_y_n16.txt");
+            BesselConvergenceSummary<Pow2.N32>("../../../../results/bessel_y_n32.txt");
+            BesselConvergenceSummary<Pow2.N64>("../../../../results/bessel_y_n64.txt");
 
             Console.WriteLine("END");
             Console.Read();
@@ -187,9 +181,9 @@ namespace BesselApproximation {
 
                 sw.WriteLine($"z threshold: {z_threshold}");
 
-                for (decimal nu = -64; nu <= 64; nu += 1 / 8m) {
+                for (decimal nu = 0; nu <= 64; nu++) {
                     int min_matchbits = MultiPrecision<N>.Bits;
-                    
+
                     sw.WriteLine($"nu: {nu}");
 
                     for (decimal z = 0; z < Math.Min(8 + 1 / 8m, z_threshold - 8); z += 1 / 8m) {
@@ -204,8 +198,8 @@ namespace BesselApproximation {
             }
 
             static int plot(StreamWriter sw, decimal nu, int min_matchbits, decimal z) {
-                MultiPrecision<N> t = MultiPrecisionSandbox<N>.BesselJ(nu, z);
-                MultiPrecision<Plus1<N>> s = MultiPrecisionSandbox<Plus1<N>>.BesselJ(nu, z);
+                MultiPrecision<N> t = MultiPrecisionSandbox<N>.BesselY(nu, z);
+                MultiPrecision<Plus1<N>> s = MultiPrecisionSandbox<Plus1<N>>.BesselY(nu, z);
 
                 sw.WriteLine($"  z: {z}");
                 sw.WriteLine($"  f : {t}");
