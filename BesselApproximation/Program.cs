@@ -51,11 +51,15 @@ namespace BesselApproximation {
 
             //MultiPrecision<Pow2.N4> s1 = MultiPrecisionSandbox<Pow2.N4>.BesselY(1, 0.5);
 
-            BesselConvergenceSummary<Pow2.N4>("../../../../results/bessel_y_n4.txt");
-            BesselConvergenceSummary<Pow2.N8>("../../../../results/bessel_y_n8.txt");
-            BesselConvergenceSummary<Pow2.N16>("../../../../results/bessel_y_n16.txt");
-            BesselConvergenceSummary<Pow2.N32>("../../../../results/bessel_y_n32.txt");
-            BesselConvergenceSummary<Pow2.N64>("../../../../results/bessel_y_n64.txt");
+            //BesselConvergenceSummary<Pow2.N4>("../../../../results/bessel_y_n4.txt");
+            //BesselConvergenceSummary<Pow2.N8>("../../../../results/bessel_y_n8.txt");
+            //BesselConvergenceSummary<Pow2.N16>("../../../../results/bessel_y_n16.txt");
+            //BesselConvergenceSummary<Pow2.N32>("../../../../results/bessel_y_n32.txt");
+            //BesselConvergenceSummary<Pow2.N64>("../../../../results/bessel_y_n64.txt");
+
+            BesselNonIntegerSummary<Pow2.N8>("../../../../results/bessel_y_n8_nonint.txt");
+            BesselNonIntegerSummary<Pow2.N16>("../../../../results/bessel_y_n16_nonint.txt");
+            BesselNonIntegerSummary<Pow2.N32>("../../../../results/bessel_y_n32_nonint.txt");
 
             Console.WriteLine("END");
             Console.Read();
@@ -200,6 +204,74 @@ namespace BesselApproximation {
             static int plot(StreamWriter sw, decimal nu, int min_matchbits, decimal z) {
                 MultiPrecision<N> t = MultiPrecisionSandbox<N>.BesselY(nu, z);
                 MultiPrecision<Plus1<N>> s = MultiPrecisionSandbox<Plus1<N>>.BesselY(nu, z);
+
+                sw.WriteLine($"  z: {z}");
+                sw.WriteLine($"  f : {t}");
+                sw.WriteLine($"  {t.ToHexcode()}");
+                sw.WriteLine($"  {s.ToHexcode()}");
+
+                MultiPrecision<N> err = MultiPrecision<N>.Abs(t - s.Convert<N>());
+
+                sw.WriteLine($"  err : {err}");
+
+                for (int keepbits = MultiPrecision<N>.Bits; keepbits >= 0; keepbits--) {
+                    if (keepbits == 0) {
+                        min_matchbits = 0;
+                    }
+                    else if (MultiPrecision<N>.RoundMantissa(t, MultiPrecision<N>.Bits - keepbits) == MultiPrecision<N>.RoundMantissa(s.Convert<N>(), MultiPrecision<N>.Bits - keepbits)) {
+                        sw.WriteLine($"  matchbits : {keepbits}");
+
+                        if (keepbits < min_matchbits) {
+                            min_matchbits = keepbits;
+                        }
+
+                        break;
+                    }
+                }
+
+                return min_matchbits;
+            }
+        }
+
+        private static void BesselNonIntegerSummary<N>(string filepath) where N : struct, IConstant {
+            using (StreamWriter sw = new StreamWriter(filepath)) {
+                sw.WriteLine($"bits: {MultiPrecision<N>.Bits}");
+
+                int z_threshold = (int)Math.Ceiling(50 + 11.0965 * MultiPrecision<N>.Length);
+
+                sw.WriteLine($"z threshold: {z_threshold}");
+
+                for (int n = -60; n <= 60; n += 10) {
+                    for (MultiPrecision<N> nu = 1; nu >= MultiPrecision<N>.Ldexp(1, -32); nu /= 2) {
+
+                        int min_matchbits = MultiPrecision<N>.Bits;
+                
+                        sw.WriteLine($"nu: {n + nu}, delta nu: {nu} {nu.Exponent}");
+
+                        for (decimal z = 0; z < Math.Min(8 + 1 / 8m, z_threshold - 8); z += 1 / 8m) {
+                            min_matchbits = plot(sw, n + nu, min_matchbits, z);
+                        }
+                        for (decimal z = Math.Max(0, z_threshold - 8); z <= z_threshold + 8; z += 1 / 8m) {
+                            min_matchbits = plot(sw, n + nu, min_matchbits, z);
+                        }
+
+                        sw.WriteLine($"nu: {n - nu}, delta nu: {nu} {nu.Exponent}");
+
+                        for (decimal z = 0; z < Math.Min(8 + 1 / 8m, z_threshold - 8); z += 1 / 8m) {
+                            min_matchbits = plot(sw, n - nu, min_matchbits, z);
+                        }
+                        for (decimal z = Math.Max(0, z_threshold - 8); z <= z_threshold + 8; z += 1 / 8m) {
+                            min_matchbits = plot(sw, n - nu, min_matchbits, z);
+                        }
+
+                        sw.WriteLine($"min matchbits : {min_matchbits}");
+                    }
+                }
+            }
+
+            static int plot(StreamWriter sw, MultiPrecision<N> nu, int min_matchbits, decimal z) {
+                MultiPrecision<N> t = MultiPrecisionSandbox<N>.BesselY(nu, z);
+                MultiPrecision<Plus1<N>> s = MultiPrecisionSandbox<Plus1<N>>.BesselY(nu.Convert<Plus1<N>>(), z);
 
                 sw.WriteLine($"  z: {z}");
                 sw.WriteLine($"  f : {t}");
