@@ -219,12 +219,37 @@ namespace BesselApproximation {
         }
 
         private static MultiPrecision<Plus1<N>> BesselYNearZero(MultiPrecision<N> nu, MultiPrecision<N> z) {
-            if (nu != MultiPrecision<N>.Truncate(nu)) {
-                return BesselYNonIntegerNu(nu, z);
+            int n = (int)MultiPrecision<N>.Round(nu);
+
+            if (nu != n) {
+                MultiPrecision<N> dnu = nu - n;
+
+                if (dnu.Exponent >= -16) {
+                    return BesselYNonIntegerNu(nu, z);
+                }
+                if (dnu.Exponent >= -32) {
+                    return MultiPrecisionSandbox<Plus1<N>>.BesselYNonIntegerNu(nu.Convert<Plus1<N>>(), z.Convert<Plus1<N>>()).Convert<Plus1<N>>();
+                }
+                if (dnu.Exponent >= -48) {
+                    return MultiPrecisionSandbox<Plus2<N>>.BesselYNonIntegerNu(nu.Convert<Plus2<N>>(), z.Convert<Plus2<N>>()).Convert<Plus1<N>>();
+                }
+                if (dnu.Exponent >= -80) {
+                    return MultiPrecisionSandbox<Plus4<N>>.BesselYNonIntegerNu(nu.Convert<Plus4<N>>(), z.Convert<Plus4<N>>()).Convert<Plus1<N>>();
+                }
+                if (dnu.Exponent >= -144) {
+                    return MultiPrecisionSandbox<Plus8<N>>.BesselYNonIntegerNu(nu.Convert<Plus8<N>>(), z.Convert<Plus8<N>>()).Convert<Plus1<N>>();
+                }
+                if (dnu.Exponent >= -272) {
+                    return MultiPrecisionSandbox<Plus16<N>>.BesselYNonIntegerNu(nu.Convert<Plus16<N>>(), z.Convert<Plus16<N>>()).Convert<Plus1<N>>();
+                }
+
+                throw new ArgumentException(
+                    "The calculation of the BesselY function value is invalid because it loses digits" +
+                    " when nu is extremely close to an integer. (|nu - round(nu)| < 1.32 x 10^-82 and nu != round(nu))", 
+                    nameof(nu));
             }
-            else {
-                return BesselYIntegerNuNearZero(nu, z);
-            }
+
+            return BesselYIntegerNuNearZero(n, z);
         }
 
         private static MultiPrecision<Plus1<N>> BesselYNonIntegerNu(MultiPrecision<N> nu, MultiPrecision<N> z) {
@@ -240,9 +265,7 @@ namespace BesselApproximation {
             return y;
         }
 
-        private static MultiPrecision<Plus1<N>> BesselYIntegerNuNearZero(MultiPrecision<N> nu, MultiPrecision<N> z) {
-            int n = (int)MultiPrecision<N>.Round(nu);
-
+        private static MultiPrecision<Plus1<N>> BesselYIntegerNuNearZero(int n, MultiPrecision<N> z) {
             Consts.BesselIntegerFiniteTermCoef finite_table = Consts.Bessel.IntegerFiniteTermCoef(n);
             Consts.BesselIntegerConvergenceTermCoef convergence_table = Consts.Bessel.IntegerConvergenceTermCoef(n);
 
