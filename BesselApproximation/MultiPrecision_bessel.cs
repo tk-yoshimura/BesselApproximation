@@ -24,7 +24,7 @@ namespace BesselApproximation {
                 long n = (long)nu;
                 return ((n & 1L) == 0) ? BesselJ(nu, MultiPrecision<N>.Abs(x)) : -BesselJ(nu, MultiPrecision<N>.Abs(x));
             }
-            if (x.IsZero && nu.IsZero) {
+            if ((x / 2).IsZero && nu.IsZero) {
                 return 1;
             }
             if (nu.Sign == Sign.Minus && nu == MultiPrecision<N>.Truncate(nu)) {
@@ -32,10 +32,10 @@ namespace BesselApproximation {
                 return ((n & 1L) == 0) ? BesselJ(MultiPrecision<N>.Abs(nu), x) : -BesselJ(MultiPrecision<N>.Abs(nu), x);
             }
 
-            if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Truncate(nu)) {
-                long n = (long)MultiPrecision<N>.Truncate(nu);
+            if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Floor(nu)) {
+                long n = (long)MultiPrecision<N>.Floor(nu);
 
-                if (n >= -2 || n < 2) {
+                if (n >= -2 && n < 2) {
                     MultiPrecision<Plus1<N>> x_ex = x.Convert<Plus1<N>>();
                     MultiPrecision<Plus1<N>> envelope = MultiPrecision<Plus1<N>>.Sqrt(2 / (MultiPrecision<Plus1<N>>.PI * x_ex));
 
@@ -54,8 +54,8 @@ namespace BesselApproximation {
                 }
             }
 
-            if (MultiPrecision<N>.Length < 8) {
-                return MultiPrecisionSandbox<Pow2.N8>.BesselJ(nu.Convert<Pow2.N8>(), x.Convert<Pow2.N8>()).Convert<N>();
+            if (MultiPrecision<N>.Length <= 4) {
+                return MultiPrecisionSandbox<Plus1<N>>.BesselJ(nu.Convert<Plus1<N>>(), x.Convert<Plus1<N>>()).Convert<N>();
             }
 
             if (x < Consts.BesselJY.ApproxThreshold) {
@@ -90,10 +90,10 @@ namespace BesselApproximation {
                 return ((n & 1L) == 0) ? BesselY(MultiPrecision<N>.Abs(nu), x) : -BesselY(MultiPrecision<N>.Abs(nu), x);
             }
 
-            if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Truncate(nu)) {
-                long n = (long)MultiPrecision<N>.Truncate(nu);
+            if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Floor(nu)) {
+                long n = (long)MultiPrecision<N>.Floor(nu);
 
-                if (n >= -2 || n < 2) {
+                if (n >= -2 && n < 2) {
                     MultiPrecision<Plus1<N>> x_ex = x.Convert<Plus1<N>>();
                     MultiPrecision<Plus1<N>> envelope = MultiPrecision<Plus1<N>>.Sqrt(2 / (MultiPrecision<Plus1<N>>.PI * x_ex));
 
@@ -112,8 +112,8 @@ namespace BesselApproximation {
                 }
             }
 
-            if (MultiPrecision<N>.Length < 8) {
-                return MultiPrecisionSandbox<Pow2.N8>.BesselY(nu.Convert<Pow2.N8>(), x.Convert<Pow2.N8>()).Convert<N>();
+            if (MultiPrecision<N>.Length <= 4) {
+                return MultiPrecisionSandbox<Plus1<N>>.BesselY(nu.Convert<Plus1<N>>(), x.Convert<Plus1<N>>()).Convert<N>();
             }
 
             if (x < Consts.BesselJY.ApproxThreshold) {
@@ -135,7 +135,7 @@ namespace BesselApproximation {
 
             Sign sign = Sign.Plus;
 
-            for (int k = 0; k < int.MaxValue; k++) {
+            for (int k = 0; k < int.MaxValue; k++, u *= w) {
                 MultiPrecision<Double<N>> c = u * table.Value(k);
 
                 if (sign == Sign.Plus) {
@@ -146,22 +146,21 @@ namespace BesselApproximation {
                     x -= c;
                     sign = Sign.Plus;
                 }
-                u *= w;
 
                 if (c.IsZero || x.Exponent - c.Exponent > MultiPrecision<Plus1<N>>.Bits) {
                     break;
                 }
+
+                if (k >= MultiPrecision<N>.Bits && Math.Max(x.Exponent, c.Exponent) < -MultiPrecision<N>.Bits * 8) {
+                    return 0;
+                }
             }
 
             MultiPrecision<Double<N>> p;
-            if (nu == 0) {
-                p = 1;
-            }
-            else if (nu == 1) {
-                p = z_ex / 2;
-            }
-            else if (nu == 2) {
-                p = z_ex * z_ex / 4;
+            if (nu == MultiPrecision<N>.Truncate(nu)) {
+                int n = (int)MultiPrecision<N>.Round(nu);
+
+                p = MultiPrecision<Double<N>>.Pow(z_ex / 2, n);
             }
             else {
                 p = MultiPrecision<Double<N>>.Pow(z_ex / 2, nu.Convert<Double<N>>());
@@ -183,7 +182,7 @@ namespace BesselApproximation {
 
             Sign sign = Sign.Plus;
 
-            for (int k = 0; k <= Consts.BesselJY.LimitApproxTerms; k++) {
+            for (int k = 0; k <= Consts.BesselJY.LimitApproxTerms; k++, p *= w, q *= w) {
                 MultiPrecision<Plus4<N>> c = p * table.Value(k * 2);
                 MultiPrecision<Plus4<N>> s = q * table.Value(k * 2 + 1);
 
@@ -197,9 +196,6 @@ namespace BesselApproximation {
                     y -= s;
                     sign = Sign.Plus;
                 }
-
-                p *= w;
-                q *= w;
 
                 if (!c.IsZero && x.Exponent - c.Exponent <= MultiPrecision<Plus1<N>>.Bits) {
                     continue;
@@ -322,7 +318,7 @@ namespace BesselApproximation {
 
             Sign sign = Sign.Plus;
 
-            for (int k = 0; k <= Consts.BesselJY.LimitApproxTerms; k++) {
+            for (int k = 0; k <= Consts.BesselJY.LimitApproxTerms; k++, p *= w, q *= w) {
                 MultiPrecision<Plus4<N>> c = p * table.Value(k * 2);
                 MultiPrecision<Plus4<N>> s = q * table.Value(k * 2 + 1);
 
@@ -336,9 +332,6 @@ namespace BesselApproximation {
                     y -= s;
                     sign = Sign.Plus;
                 }
-
-                p *= w;
-                q *= w;
 
                 if (!c.IsZero && x.Exponent - c.Exponent <= MultiPrecision<Plus1<N>>.Bits) {
                     continue;
@@ -458,7 +451,7 @@ namespace BesselApproximation {
 
                     MultiPrecision<Double<N>> a0;
 
-                    if (nu >= 0 && nu == MultiPrecision<N>.Truncate(nu)) {
+                    if (nu >= 0 && nu == MultiPrecision<N>.Round(nu)) {
                         long n = (long)nu;
 
                         a0 = 1;
@@ -485,7 +478,7 @@ namespace BesselApproximation {
                         return c_table[n];
                     }
 
-                    for (int k = c_table.Count; k <= n; k++) {
+                    for (long k = c_table.Count; k <= n; k++) {
                         MultiPrecision<Double<N>> a = a_table.Last() * (checked(4 * k) * (nu + k));
 
                         a_table.Add(a);
@@ -518,9 +511,9 @@ namespace BesselApproximation {
                         return a_table[n];
                     }
 
-                    for (int k = a_table.Count; k <= n; k++) {
+                    for (long k = a_table.Count; k <= n; k++) {
                         MultiPrecision<Plus4<N>> a =
-                            a_table.Last() * MultiPrecision<Plus4<N>>.Div(checked(squa_nu4 - (2 * k - 1) * (2 * k - 1)), checked(k * 8));
+                            a_table.Last() * MultiPrecision<Plus4<N>>.Div(squa_nu4 - checked((2 * k - 1) * (2 * k - 1)), checked(k * 8));
 
                         a_table.Add(a);
                     }
@@ -544,7 +537,7 @@ namespace BesselApproximation {
 
                     this.a_table.Add(a);
 
-                    for (int k = 1; k < n; k++) {
+                    for (long k = 1; k < n; k++) {
                         a /= checked(4 * k * (n - k));
                         this.a_table.Add(a);
                     }
@@ -596,10 +589,12 @@ namespace BesselApproximation {
                         return a_table[k];
                     }
 
-                    for (int i = a_table.Count; i <= k; i++) {
+                    for (long i = a_table.Count; i <= k; i++) {
                         r *= checked(4 * i * (n + i));
+
                         MultiPrecision<Double<N>> a =
-                            (MultiPrecision<Double<N>>.HarmonicNumber(i) + MultiPrecision<Double<N>>.HarmonicNumber(n + i) - b) / r;
+                            (MultiPrecision<Double<N>>.HarmonicNumber(checked((int)i))
+                            + MultiPrecision<Double<N>>.HarmonicNumber(checked((int)(n + i))) - b) / r;
 
                         a_table.Add(a);
                     }
