@@ -10,7 +10,10 @@ namespace BesselApproximation {
 
         public static MultiPrecision<N> BesselJ(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
-                throw new ArgumentOutOfRangeException(nameof(nu));
+                throw new ArgumentOutOfRangeException(
+                    nameof(nu), 
+                    "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
+                );
             }
             if (nu.IsNaN || x.IsNaN) {
                 return MultiPrecision<N>.NaN;
@@ -23,6 +26,10 @@ namespace BesselApproximation {
 
                 long n = (long)nu;
                 return ((n & 1L) == 0) ? BesselJ(nu, MultiPrecision<N>.Abs(x)) : -BesselJ(nu, MultiPrecision<N>.Abs(x));
+            }
+
+            if (!x.IsFinite) {
+                return 0;
             }
             if ((x / 2).IsZero && nu.IsZero) {
                 return 1;
@@ -46,10 +53,14 @@ namespace BesselApproximation {
                         return (envelope * MultiPrecision<Plus1<N>>.Cos(x_ex)).Convert<N>();
                     }
                     if (n == 0) {
-                        return (envelope * MultiPrecision<Plus1<N>>.Sin(x_ex)).Convert<N>();
+                        MultiPrecision<N> y = (envelope * MultiPrecision<Plus1<N>>.Sin(x_ex)).Convert<N>();
+
+                        return y.IsNormal ? y : 0;
                     }
                     if (n == 1) {
-                        return (envelope * (MultiPrecision<Plus1<N>>.Sin(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cos(x_ex))).Convert<N>();
+                        MultiPrecision<N> y = (envelope * (MultiPrecision<Plus1<N>>.Sin(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cos(x_ex))).Convert<N>();
+
+                        return y.IsNormal ? y : 0;
                     }
                 }
             }
@@ -68,7 +79,10 @@ namespace BesselApproximation {
 
         public static MultiPrecision<N> BesselY(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
-                throw new ArgumentOutOfRangeException(nameof(nu));
+                throw new ArgumentOutOfRangeException(
+                    nameof(nu), 
+                    "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
+                );
             }
             if (nu.IsNaN || x.IsNaN) {
                 return MultiPrecision<N>.NaN;
@@ -81,6 +95,10 @@ namespace BesselApproximation {
 
                 long n = (long)nu;
                 return ((n & 1L) == 0) ? BesselY(nu, MultiPrecision<N>.Abs(x)) : -BesselY(nu, MultiPrecision<N>.Abs(x));
+            }
+
+            if (!x.IsFinite) {
+                return 0;
             }
             if (x.IsZero) {
                 return MultiPrecision<N>.NegativeInfinity;
@@ -98,10 +116,14 @@ namespace BesselApproximation {
                     MultiPrecision<Plus1<N>> envelope = MultiPrecision<Plus1<N>>.Sqrt(2 / (MultiPrecision<Plus1<N>>.PI * x_ex));
 
                     if (n == -2) {
-                        return -(envelope * (MultiPrecision<Plus1<N>>.Sin(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cos(x_ex))).Convert<N>();
+                        MultiPrecision<N> y = -(envelope * (MultiPrecision<Plus1<N>>.Sin(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cos(x_ex))).Convert<N>();
+
+                        return y.IsNormal ? y : 0;
                     }
                     if (n == -1) {
-                        return (envelope * MultiPrecision<Plus1<N>>.Sin(x_ex)).Convert<N>();
+                        MultiPrecision<N> y = (envelope * MultiPrecision<Plus1<N>>.Sin(x_ex)).Convert<N>();
+
+                        return y.IsNormal ? y : 0;
                     }
                     if (n == 0) {
                         return -(envelope * MultiPrecision<Plus1<N>>.Cos(x_ex)).Convert<N>();

@@ -49,17 +49,20 @@ namespace BesselApproximation {
             //BesselNearZeroConvergenceSummary<Pow2.N256, Expand50<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m384.txt", 2856, 2826);
             //BesselNearZeroConvergenceSummary<Pow2.N256, Double<Pow2.N256>>("../../../../results/bessel_nearzero_convergence_n256_m512.txt", 2856, 2826);
 
-            BesselJConvergenceSummary<Pow2.N4>("../../../../results_disused/bessel_j_n4.txt");
-            BesselYConvergenceSummary<Pow2.N4>("../../../../results_disused/bessel_y_n4.txt");
+            //BesselJConvergenceSummary<Pow2.N4>("../../../../results_disused/bessel_j_n4.txt");
+            //BesselYConvergenceSummary<Pow2.N4>("../../../../results_disused/bessel_y_n4.txt");
 
-            BesselJConvergenceSummary<Pow2.N8>("../../../../results_disused/bessel_j_n8.txt");
-            BesselYConvergenceSummary<Pow2.N8>("../../../../results_disused/bessel_y_n8.txt");
+            //BesselJConvergenceSummary<Pow2.N8>("../../../../results_disused/bessel_j_n8.txt");
+            //BesselYConvergenceSummary<Pow2.N8>("../../../../results_disused/bessel_y_n8.txt");
 
-            BesselJConvergenceSummary<Pow2.N16>("../../../../results_disused/bessel_j_n16.txt");
-            BesselYConvergenceSummary<Pow2.N16>("../../../../results_disused/bessel_y_n16.txt");
+            //BesselJConvergenceSummary<Pow2.N16>("../../../../results_disused/bessel_j_n16.txt");
+            //BesselYConvergenceSummary<Pow2.N16>("../../../../results_disused/bessel_y_n16.txt");
             
-            BesselJConvergenceSummary<Pow2.N32>("../../../../results_disused/bessel_j_n32.txt");
-            BesselYConvergenceSummary<Pow2.N32>("../../../../results_disused/bessel_y_n32.txt");
+            //BesselJConvergenceSummary<Pow2.N32>("../../../../results_disused/bessel_j_n32.txt");
+            //BesselYConvergenceSummary<Pow2.N32>("../../../../results_disused/bessel_y_n32.txt");
+
+            BesselJConvergenceSummary<Plus1<Pow2.N4>>("../../../../results_disused/bessel_j_n5.txt");
+            BesselYConvergenceSummary<Plus1<Pow2.N4>>("../../../../results_disused/bessel_y_n5.txt");
             
             BesselJConvergenceSummary<Pow2.N64>("../../../../results_disused/bessel_j_n64.txt");
             BesselYConvergenceSummary<Pow2.N64>("../../../../results_disused/bessel_y_n64.txt");
