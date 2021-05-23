@@ -153,18 +153,10 @@ namespace BesselApproximation {
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
-            if (nu.IsNaN || x.IsNaN) {
+            if (nu.IsNaN || x.IsNaN || x.Sign == Sign.Minus) {
                 return MultiPrecision<N>.NaN;
             }
 
-            if (x.Sign == Sign.Minus) {
-                if (nu != MultiPrecision<N>.Truncate(nu)) {
-                    return MultiPrecision<N>.NaN;
-                }
-
-                long n = (long)nu;
-                return ((n & 1L) == 0) ? BesselI(nu, MultiPrecision<N>.Abs(x)) : -BesselI(nu, MultiPrecision<N>.Abs(x));
-            }
             if (nu.Sign == Sign.Minus && nu == MultiPrecision<N>.Truncate(nu)) {
                 return BesselI(MultiPrecision<N>.Abs(nu), x);
             }
@@ -210,42 +202,29 @@ namespace BesselApproximation {
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
-            if (nu.IsNaN || x.IsNaN) {
+            if (nu.IsNaN || x.IsNaN || x.Sign == Sign.Minus) {
                 return MultiPrecision<N>.NaN;
             }
 
-            if (x.Sign == Sign.Minus) {
-                return BesselK(nu, MultiPrecision<N>.Abs(x));
-            }
             if (x.IsZero) {
                 return MultiPrecision<N>.PositiveInfinity;
             }
-            if (nu.Sign == Sign.Minus && nu == MultiPrecision<N>.Truncate(nu)) {
+            if (nu.Sign == Sign.Minus) {
                 return BesselK(MultiPrecision<N>.Abs(nu), x);
             }
 
             if (nu - MultiPrecision<N>.Point5 == MultiPrecision<N>.Floor(nu)) {
                 long n = (long)MultiPrecision<N>.Floor(nu);
 
-                if (n >= -2 && n < 2) {
+                if (n >= 0 && n < 2) {
                     MultiPrecision<Plus1<N>> x_ex = x.Convert<Plus1<N>>();
-                    MultiPrecision<Plus1<N>> r = MultiPrecision<Plus1<N>>.Sqrt2 / MultiPrecision<Plus1<N>>.Sqrt(MultiPrecision<Plus1<N>>.PI * x_ex);
+                    MultiPrecision<Plus1<N>> r = MultiPrecision<Plus1<N>>.Exp(-x_ex) * MultiPrecision<Plus1<N>>.Sqrt(MultiPrecision<Plus1<N>>.PI / (2 * x_ex));
 
-                    if (n == -2) {
-                        return -(r * (MultiPrecision<Plus1<N>>.Cosh(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Sinh(x_ex))).Convert<N>();
-                    }
-                    if (n == -1) {
-                        return (r * MultiPrecision<Plus1<N>>.Cosh(x_ex)).Convert<N>();
-                    }
                     if (n == 0) {
-                        MultiPrecision<N> y = (r * MultiPrecision<Plus1<N>>.Sinh(x_ex)).Convert<N>();
-
-                        return y.IsNormal ? y : 0;
+                        return r.Convert<N>();
                     }
                     if (n == 1) {
-                        MultiPrecision<N> y = -(r * (MultiPrecision<Plus1<N>>.Sinh(x_ex) / x_ex - MultiPrecision<Plus1<N>>.Cosh(x_ex))).Convert<N>();
-
-                        return y.IsNormal ? y : 0;
+                        return (r * (1 + 1 / x_ex)).Convert<N>();
                     }
                 }
             }
