@@ -1,5 +1,8 @@
 # BesselApproximation
 
+# *This project has already been merged into MultiPrecision.*
+[MultiPrecision](https://github.com/tk-yoshimura/MultiPrecision)
+
 ## Definitions
 
 Bessel functions of the first kind:
