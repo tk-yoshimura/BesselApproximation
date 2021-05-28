@@ -11,7 +11,7 @@ namespace BesselApproximation {
         public static MultiPrecision<N> BesselJ(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
                 throw new ArgumentOutOfRangeException(
-                    nameof(nu), 
+                    nameof(nu),
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
@@ -80,7 +80,7 @@ namespace BesselApproximation {
         public static MultiPrecision<N> BesselY(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
                 throw new ArgumentOutOfRangeException(
-                    nameof(nu), 
+                    nameof(nu),
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
@@ -149,7 +149,7 @@ namespace BesselApproximation {
         public static MultiPrecision<N> BesselI(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
                 throw new ArgumentOutOfRangeException(
-                    nameof(nu), 
+                    nameof(nu),
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
@@ -198,7 +198,7 @@ namespace BesselApproximation {
         public static MultiPrecision<N> BesselK(MultiPrecision<N> nu, MultiPrecision<N> x) {
             if (MultiPrecision<N>.Abs(nu) > 64) {
                 throw new ArgumentOutOfRangeException(
-                    nameof(nu), 
+                    nameof(nu),
                     "In the calculation of the Bessel function, nu with an absolute value greater than 64 is not supported."
                 );
             }
@@ -354,7 +354,7 @@ namespace BesselApproximation {
 
                 throw new ArgumentException(
                     "The calculation of the BesselY function value is invalid because it loses digits" +
-                    " when nu is extremely close to an integer. (|nu - round(nu)| < 1.32 x 10^-82 and nu != round(nu))", 
+                    " when nu is extremely close to an integer. (|nu - round(nu)| < 1.32 x 10^-82 and nu != round(nu))",
                     nameof(nu));
             }
 
@@ -522,7 +522,7 @@ namespace BesselApproximation {
                 }
             }
 
-            MultiPrecision<Plus4<N>> r = 
+            MultiPrecision<Plus4<N>> r =
                 MultiPrecision<Plus4<N>>.Exp(z_ex) / MultiPrecision<Plus4<N>>.Sqrt(2 * MultiPrecision<Plus4<N>>.PI * z_ex);
 
             MultiPrecision<Plus4<N>> y = r * x;
@@ -557,7 +557,7 @@ namespace BesselApproximation {
 
                 throw new ArgumentException(
                     "The calculation of the BesselK function value is invalid because it loses digits" +
-                    " when nu is extremely close to an integer. (|nu - round(nu)| < 1.32 x 10^-82 and nu != round(nu))", 
+                    " when nu is extremely close to an integer. (|nu - round(nu)| < 1.32 x 10^-82 and nu != round(nu))",
                     nameof(nu));
             }
 
@@ -604,14 +604,14 @@ namespace BesselApproximation {
                         x += u * finite_table.Value(k);
                         sign = Sign.Minus;
                     }
-                    else { 
+                    else {
                         x -= u * finite_table.Value(k);
                         sign = Sign.Plus;
                     }
                     continue;
                 }
 
-                if (r.Exponent < -MultiPrecision<N>.Bits * 8 && (c.IsZero || y.Exponent - c.Exponent > MultiPrecision<Plus1<N>>.Bits)) { 
+                if (r.Exponent < -MultiPrecision<N>.Bits * 8 && (c.IsZero || y.Exponent - c.Exponent > MultiPrecision<Plus1<N>>.Bits)) {
                     break;
                 }
 
