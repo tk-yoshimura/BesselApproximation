@@ -22,7 +22,7 @@ Modified Bessel functions  of the second kind:
 
 ![int besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/int_besselK.svg)
 
-## Linearly Independent
+## Linearly Independence
 
 ![depend besselJ](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/depend_besselJ.svg)
 
