@@ -50,7 +50,9 @@ Modified Bessel functions  of the second kind:
 
 ![limit besselJY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselJY.svg)
 
-![limit besselIK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselIK.svg)
+![limit besselI](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselI.svg)
+
+![limit besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselK.svg)
 
 ## Generate Coefs
 
