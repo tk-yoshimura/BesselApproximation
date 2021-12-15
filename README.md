@@ -44,16 +44,12 @@ Modified Bessel functions  of the second kind:
 
 ![recurr besselJY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/recurr_besselJY.svg)
 
-![recurr besselIK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/recurr_besselIK.svg)
+![recurr besselI](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/recurr_besselI.svg)
+
+![recurr besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/recurr_besselK.svg)
 
 ## Limit Approx
 
 ![limit besselJY](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselJY.svg)
 
-![limit besselI](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselI.svg)
-
-![limit besselK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselK.svg)
-
-## Generate Coefs
-
-![coef bessel](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/coef_bessel.svg)
+![limit besselIK](https://github.com/tk-yoshimura/BesselApproximation/blob/main/figures/limit_besselIK.svg)
